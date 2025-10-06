@@ -158,17 +158,15 @@ while($operation){
     }
 
 
-   
+# At risk users   
     elseif($choice -eq 9){
         $days = Read-Host -Prompt "Please enter the number of days back to check"
-        $userLogins = getFailedLogins $days
-        $byUser = $userLogins | Group -Property 'User'
-        Write-Host "At risk users:"
-        $byUser | ForEach-Object {
-            if($_.Count -gt 10){
-                Write-Host $_.Name
-            } 
-        }
+        $atRisks = atRiskUsers($days)
+        #Write-Host $atRisks.Length
+        Write-Host $atRisks | Out-String
+        #for($i=0, $i -lt $atRisks.Length; $i++){
+        #    Write-Host $atRisks[$i]
+        #}
     }
     else{
         Write-Host "Please enter a number from 1 through 10"|Out-String

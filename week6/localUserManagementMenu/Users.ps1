@@ -98,3 +98,18 @@ Function checkPassword($password){
     }
 
 }
+
+# At risk users
+function atRiskUsers($days){
+        
+        $userLogins = getFailedLogins $days
+        $byUser = $userLogins | Group -Property 'User'
+        Write-Host "At risk users:"
+        $atRisks = @()
+        $byUser | ForEach-Object {
+            if($_.Count -gt 10){
+                 $atRisks += $_.Name
+            } 
+        }
+        return $atRisks
+}
