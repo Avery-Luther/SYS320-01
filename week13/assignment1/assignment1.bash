@@ -13,7 +13,7 @@ read instName
 
 echo ""
 echo "Courses of $instName :"
-cat "$courseFile" | grep "$instName" | cut -d';' -f1,2 | \
+awk -v instName="$instName" -F ';' '{if (match($7, instName)) print $0; }' $courseFile | cut -d';' -f1,2 | \
 sed 's/;/ | /g'
 echo ""
 
@@ -41,8 +41,8 @@ function locationCourses(){
 	read location
 	echo ""
 	echo "Courses in $location :"
-	cat "$courseFile" | grep "$location" | cut -d';' -f1,2,5,6,7 | \
-	sed 's/;/ | /g'
+#	cat "$courseFile" | grep "$location" | cut -d';' -f1,2,5,6,7 | \
+	awk -v location="$location" -F ';' '{if (match($10, location)) print $0; }' $courseFile | cut -d';' -f1,2,5,6,7 | sed 's/;/ | /g'
 	echo ""
 
 
@@ -59,8 +59,8 @@ function availableClasses(){
 	echo ""
 	echo "$code courses with availablity:"
 
-	awk -F ';' '{if ( $4 > 0) {print} }' $courseFile \
-		| grep "$code" | sed 's/;/ | /g'
+	awk -v code="$code" -F ';' '{if ( $4 > 0) if (match($1, code)) print $0; }' $courseFile \
+		| sed 's/;/ | /g'
  
 }
 while :
